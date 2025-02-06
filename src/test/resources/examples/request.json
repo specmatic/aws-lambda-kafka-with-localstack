@@ -1,0 +1,19 @@
+{
+  "name": "json conversion",
+  "receive": {
+    "topic": "io.specmatic.json.request",
+    "payload": {
+      "id": 1,
+      "xsd": "xsd 1"
+    }
+  },
+  "send": [
+    {
+      "topic": "io.specmatic.json.reply",
+      "payload": {
+        "id": 1,
+        "json": "Converted from XSD"
+      }
+    }
+  ]
+}

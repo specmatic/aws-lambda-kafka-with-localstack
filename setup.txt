@@ -1,0 +1,56 @@
+aws kafka create-cluster \
+    --cluster-name my-kafka-cluster \
+    --kafka-version 2.8.1 \
+    --broker-node-group-info file://broker-config.json \
+    --number-of-broker-nodes 1 \
+    --region us-east-1 \
+    --profile localstack \
+    --endpoint-url=http://localhost:4566
+
+
+aws kafka list-clusters \
+    --region us-east-1 \
+    --profile localstack \
+    --endpoint-url=http://localhost:4566
+
+
+
+
+aws kafka get-bootstrap-brokers \
+    --cluster-arn "arn:aws:kafka:us-east-1:000000000000:cluster/my-kafka-cluster/46ee14e0-ed00-4c1d-9fc1-581912e8d35e-25" \
+    --profile localstack \
+    --endpoint-url=http://localhost:4566
+
+
+
+kafka-topics --create \
+    --bootstrap-server localhost:4511 \
+    --replication-factor 1 \
+    --partitions 1 \
+    --topic io.specmatic.json.request
+
+
+kafka-topics --create \
+    --bootstrap-server localhost:4511 \
+    --replication-factor 1 \
+    --partitions 1 \
+    --topic io.specmatic.json.reply
+
+
+
+aws lambda create-function \
+    --function-name LambdaToKafka \
+    --runtime java17 \
+    --role arn:aws:iam::000000000000:role/lambda-role \
+    --handler com.example.XsdMessageHandler \
+    --zip-file fileb://build/libs/aws-lambda-kafka.jar \
+    --timeout 30 \
+    --memory-size 512 \
+    --region us-east-1 \
+    --profile localstack \
+    --endpoint-url=http://localhost:4566
+
+
+aws lambda list-functions --profile localstack --endpoint-url=http://localhost:4566
+
+

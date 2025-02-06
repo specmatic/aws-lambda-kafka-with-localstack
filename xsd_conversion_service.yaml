@@ -1,0 +1,57 @@
+asyncapi: 3.0.0
+info:
+  title: Specmatic XSD to JSON Processing API
+  version: 1.0.0
+  description: API that subscribes to `io.specmatic.json.request` and publishes to `io.specmatic.json.reply`.
+channels:
+  io.specmatic.json.request:
+    address: io.specmatic.json.request
+    messages:
+      requestMessage:
+        $ref: '#/components/messages/requestMessage'
+
+  io.specmatic.json.reply:
+    address: io.specmatic.json.reply
+    messages:
+      replyMessage:
+        $ref: '#/components/messages/replyMessage'
+
+operations:
+  jsonConversion:
+    action: receive
+    channel:
+      $ref: '#/channels/io.specmatic.json.request'
+    messages:
+      - $ref: '#/channels/io.specmatic.json.request/messages/requestMessage'
+  jsonConversionReply:
+    action: send
+    channel:
+      $ref: '#/channels/io.specmatic.json.reply'
+    messages:
+      - $ref: '#/channels/io.specmatic.json.reply/messages/replyMessage'
+components:
+  messages:
+    requestMessage:
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          id:
+            type: integer
+          xsd:
+            type: string
+        required:
+          - id
+          - xsd
+    replyMessage:
+      contentType: application/json
+      payload:
+        type: object
+        properties:
+          id:
+            type: integer
+          json:
+            type: string
+        required:
+          - id
+          - json
