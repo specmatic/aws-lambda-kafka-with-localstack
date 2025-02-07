@@ -35,6 +35,10 @@ localstack auth set-token <your-auth-token>
 localstack start
 ```
 
+#### Troubleshooting `vmnetd` issues with Docker on MacOS
+
+Please refer to [GitHub comment](https://github.com/docker/for-mac/issues/6677#issuecomment-1593787335).
+
 ## 🚀 Setting up Kafka cluster
 ### **2️⃣ Create an Amazon Kafka MSK Cluster**
 ```sh
@@ -72,6 +76,9 @@ aws kafka get-bootstrap-brokers \
 ```
 
 ### **5️⃣ Create Kafka Topics**
+
+**Pre-requisite:** Install Kafka on your local machine to use the `kafka-topics.sh` command.
+
 ```sh
 kafka-topics.sh --create \
     --bootstrap-server localhost.localstack.cloud:4511 \
@@ -88,6 +95,8 @@ kafka-topics.sh --create \
 ```
 
 ### **6️⃣ Deploy AWS Lambda**
+
+**Pre-requisite:** Use JDK 17, for example if you are using jenv, please run: `jenv local 17`
 
 From the project root folder:
 
@@ -116,6 +125,8 @@ aws lambda create-function \
 ```sh
 aws lambda list-functions --profile localstack --endpoint-url=http://localhost:4566
 ```
+
+Search for the function `LambdaToKafka` using `/` and `q` to quit.
 
 ### **8️⃣ Create Event Source Mapping for Kafka**
 ```sh
