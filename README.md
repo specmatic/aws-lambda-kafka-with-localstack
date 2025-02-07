@@ -190,6 +190,3 @@ Please keep your Local Stack running for the next step.
 ```shell
 localstack stop
 ```
-
-Please note that when you restart LocalStack, you will need to create Kafka topics, deploy Lambda function and set event source mapping again.
-And your ARN may change, so you will need to update the ARN in the event source mapping.
