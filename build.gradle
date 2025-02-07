@@ -9,7 +9,6 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     maven { url uri("lib") }
-    mavenLocal()
     mavenCentral()
 }
 def specmatic_version = "2.3.0"
