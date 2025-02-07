@@ -3,6 +3,6 @@ contracts:
   - filesystem:
       directory: .
     provides:
-      - xsd_conversion_service.yaml
+      - xml_to_json.yaml
     consumes:
-      - xsd_conversion_service.yaml
+      - xml_to_json.yaml

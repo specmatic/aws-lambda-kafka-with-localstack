@@ -82,14 +82,14 @@ aws kafka get-bootstrap-brokers \
 **Pre-requisite:** Install Kafka on your local machine to use the `kafka-topics.sh` command.
 
 ```sh
-kafka-topics.sh --create \
+kafka-topics --create \
     --bootstrap-server localhost.localstack.cloud:4511 \
     --replication-factor 1 \
     --partitions 1 \
     --topic io.specmatic.json.request
 ```
 ```sh
-kafka-topics.sh --create \
+kafka-topics --create \
     --bootstrap-server localhost.localstack.cloud:4511 \
     --replication-factor 1 \
     --partitions 1 \
