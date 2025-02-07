@@ -1,4 +1,4 @@
-# Specmatic Kafka Contract Test on AWS Lambda with Amazon MSK on LocalStack using AsyncAPI 3.0
+# Run Specmatic Kafka Contract Test on AWS Lambda with Amazon MSK on LocalStack using AsyncAPI 3.0
 
 This project demonstrates below aspects
 * Setting up **AWS Lambda** to consume messages from **Amazon MSK (Kafka)**, all running locally using **LocalStack**.
