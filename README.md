@@ -59,7 +59,9 @@ aws kafka list-clusters \
     --profile localstack \
     --endpoint-url=http://localhost:4566
 ```
-Save the value of the **ClusterArn** field in the response.
+
+Please save the value of the **ClusterArn** field in the response.
+You will need to use this in some of the next steps where you see `<YOUR_CLUSTER_ARN>`.
 
 ### **4️⃣ Get Kafka Bootstrap Brokers**
 ```sh
@@ -103,7 +105,6 @@ From the project root folder:
 Build the project and create a fat jar 
 ```shell
 ./gradlew clean shadowJar
-
 ```
 
 Deploy the fat jar as a lambda function
@@ -121,6 +122,8 @@ aws lambda create-function \
     --endpoint-url=http://localhost:4566
 ```
 
+`Use `q` to quit.`
+
 ### **7️⃣ Verify Lambda Deployment**
 ```sh
 aws lambda list-functions --profile localstack --endpoint-url=http://localhost:4566
@@ -132,13 +135,15 @@ Search for the function `LambdaToKafka` using `/` and `q` to quit.
 ```sh
 aws lambda create-event-source-mapping \
     --function-name LambdaToKafka \
-    --event-source-arn "arn:aws:kafka:us-east-1:000000000000:cluster/my-kafka-cluster/46ee14e0-ed00-4c1d-9fc1-581912e8d35e-25" \
+    --event-source-arn "<YOUR_CLUSTER_ARN>" \
     --topics "io.specmatic.json.request" \
     --starting-position LATEST \
     --region us-east-1 \
     --profile localstack \
     --endpoint-url=http://localhost:4566
 ```
+
+`Use `q` to quit.`
 
 ## Testing the Lambda function:
 
@@ -148,12 +153,12 @@ aws lambda create-event-source-mapping \
 kafka-console-producer --broker-list localhost:4511 --topic io.specmatic.json.request
 ```
 
-Copy paste the following json object and press enter:
+Copy and paste the following json object and press enter:
 ```json
 {"id": 1, "xsd": "xsd 1"}
 ```
 
-Press Ctrl+D
+Press `Ctrl+D`.
 
 ### Verify message on the **io.specmatic.json.reply** topic:
 ```shell
@@ -172,8 +177,19 @@ aws logs tail /aws/lambda/LambdaToKafka --follow \
     --endpoint-url=http://localhost:4566
 ```
 
-
 ## Run Contract Tests
+
+Please keep your Local Stack running for the next step.
+
 ```shell
   ./gradlew test
 ```
+
+## Shutdown LocalStack
+
+```shell
+localstack stop
+```
+
+Please note that when you restart LocalStack, you will need to create Kafka topics, deploy Lambda function and set event source mapping again.
+And your ARN may change, so you will need to update the ARN in the event source mapping.
