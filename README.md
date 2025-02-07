@@ -9,13 +9,12 @@ and run contract tests against it using **Specmatic**
 If you don’t have the AWS CLI installed, install it from:
 [AWS CLI installation](https://docs.aws.amazon.com/cli/v1/userguide/install-macos.html)
 
-
 ### **2. Install LocalStack**
 You can install LocalStack via pip:
 ```sh
 brew install localstack
 ```
-Signup with localstack to get an Auth Token ( go for a Hobby licence).
+Signup with localstack to get an Auth Token (choose an appropriate license - Example: Trial or Hobby licence).
 
 ### **3. Create a Fake AWS Profile for LocalStack**
 Since LocalStack is a **mock AWS environment**, configure a fake profile:
