@@ -180,9 +180,9 @@ aws logs tail /aws/lambda/LambdaToKafka --follow \
     --endpoint-url=http://localhost:4566
 ```
 
-## **Run Contract Tests**
+## **Run Specmatic Kafka Contract Tests using AsyncAPI spec**
 
-This step now uses **Specmatic Kafka Support* to leverage **AsyncAPI 3.0 spec* to contract test the above Lambda setup.
+This step now uses **Specmatic Kafka Support** to leverage **AsyncAPI 3.0 spec** to contract test the above Lambda setup.
 The **AsyncAPI 3.0 spec** models the Event Driven Architecture, the topics and the schema of messages sent / received on those topics.
 
 Please keep your Local Stack running for this next step.
