@@ -29,10 +29,10 @@ aws configure --profile localstack
 
 ## 🛠️ **Set Up Kafka & Lambda in LocalStack**
 
-### **1️⃣ Start LocalStack**
+### **1️⃣ Start LocalStack with persistence enabled**
 ```sh
 localstack auth set-token <your-auth-token>
-localstack start
+LOCALSTACK_PERSISTENCE=1 localstack start
 ```
 
 #### Troubleshooting `vmnetd` issues with Docker on MacOS
