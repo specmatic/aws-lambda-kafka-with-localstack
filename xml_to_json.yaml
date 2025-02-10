@@ -23,12 +23,11 @@ operations:
       $ref: '#/channels/io.specmatic.json.request'
     messages:
       - $ref: '#/channels/io.specmatic.json.request/messages/requestMessage'
-  jsonConversionReply:
-    action: send
-    channel:
-      $ref: '#/channels/io.specmatic.json.reply'
-    messages:
-      - $ref: '#/channels/io.specmatic.json.reply/messages/replyMessage'
+    reply:
+      channel:
+        $ref: '#/channels/io.specmatic.json.reply'
+      messages:
+        - $ref: '#/channels/io.specmatic.json.reply/messages/replyMessage'
 components:
   messages:
     requestMessage:
