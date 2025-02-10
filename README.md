@@ -1,11 +1,15 @@
-# AWS Lambda with Amazon MSK on LocalStack
+# Run Specmatic Kafka Contract Test on AWS Lambda with Amazon MSK on LocalStack using AsyncAPI 3.0
 
-This project demonstrates how to set up **AWS Lambda** to consume messages from **Amazon MSK (Kafka)**, all running locally using **LocalStack**.
-and run contract tests against it using **Specmatic**
+This project demonstrates below aspects
+* Setting up **AWS Lambda** to consume messages from **Amazon MSK (Kafka)**, all running locally using **LocalStack**.
+* **Contract Test** the Lambda based on [AsyncAPI 3.0](https://www.asyncapi.com/docs/reference/specification/v3.0.0) spec using **Specmatic Kafka Support** (#NOCODE #LOWCODE approach)
 
 ## 🚀 Prerequisites
 
-### **1. Install AWS CLI**
+### **1. Install Docker Desktop and AWS CLI**
+
+Please make sure you have Docker Desktop installed on your machine.
+
 If you don’t have the AWS CLI installed, install it from:
 [AWS CLI installation](https://docs.aws.amazon.com/cli/v1/userguide/install-macos.html)
 
@@ -176,13 +180,19 @@ aws logs tail /aws/lambda/LambdaToKafka --follow \
     --endpoint-url=http://localhost:4566
 ```
 
-## Run Contract Tests
+## **Run Specmatic Kafka Contract Tests using AsyncAPI spec**
 
-Please keep your Local Stack running for the next step.
+This step now uses **Specmatic Kafka Support** to leverage **AsyncAPI 3.0 spec** to contract test the above Lambda setup.
+The **AsyncAPI 3.0 spec** models the Event Driven Architecture, the topics and the schema of messages sent / received on those topics.
+
+Please keep your Local Stack running for this next step.
 
 ```shell
   ./gradlew test
 ```
+
+You should now see the interactive Specmatic Kafka HTML test report here - [`build/reports/index.html`](build/reports/index.html).
+The report has drill down details on the messages sent and received on the Kafka topics and if the messages are as per the schema in **AsyncAPI spec**.
 
 ## Shutdown LocalStack
 
