@@ -8,10 +8,16 @@ group = 'org.example'
 version = '1.0-SNAPSHOT'
 
 repositories {
-    maven { url uri("lib") }
+    maven {
+        url uri("lib")
+    }
+    maven {
+        url "https://packages.confluent.io/maven/"
+    }
     mavenCentral()
+    mavenLocal()
 }
-def specmatic_version = "2.3.0"
+def specmatic_version = "2.10.0"
 
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
@@ -25,7 +31,7 @@ dependencies {
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     testApi "io.specmatic:junit5-support:${specmatic_version}"
-    testImplementation('io.specmatic:specmatic-kafka:0.25.0-TRIAL')
+    testImplementation('io.specmatic.kafka:specmatic-kafka:0.32.4-SNAPSHOT')
     testImplementation(
             'org.assertj:assertj-core:3.24.2',
             'org.junit.jupiter:junit-jupiter-api:5.10.1'

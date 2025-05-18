@@ -1,7 +1,8 @@
-import io.specmatic.async.junit.SpecmaticKafkaContractTest
-import io.specmatic.async.utils.EXAMPLES_DIR
-import io.specmatic.async.utils.KAFKA_HOST
-import io.specmatic.async.utils.KAFKA_PORT
+
+import io.specmatic.kafka.EXAMPLES_DIR
+import io.specmatic.kafka.KAFKA_HOST
+import io.specmatic.kafka.KAFKA_PORT
+import io.specmatic.kafka.SpecmaticKafkaContractTest
 import org.junit.jupiter.api.BeforeAll
 
 class ContractTests : SpecmaticKafkaContractTest {
@@ -10,9 +11,9 @@ class ContractTests : SpecmaticKafkaContractTest {
         @JvmStatic
         @BeforeAll
         fun setUp() {
-            System.setProperty(KAFKA_HOST, "localhost");
-            System.setProperty(KAFKA_PORT, "4511");
-            System.setProperty(EXAMPLES_DIR, "src/test/resources/examples");
+            System.setProperty(KAFKA_HOST, "localhost")
+            System.setProperty(KAFKA_PORT, "4511")
+            System.setProperty(EXAMPLES_DIR, "src/test/resources/examples")
         }
     }
 }
