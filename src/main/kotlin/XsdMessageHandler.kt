@@ -2,32 +2,27 @@ package com.example
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestHandler
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.example.models.CancelOrderRequest
+import com.example.models.CancellationReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import kotlinx.serialization.Serializable
+
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.slf4j.LoggerFactory
 import java.util.*
-import java.util.Base64
 
-@Serializable
-data class JsonConversionRequest(
-    @JsonProperty("id") val id: Int,
-    @JsonProperty("xsd") val xsd: String
-)
-
-@Serializable
-data class JsonConversionReply(val id: Int, val json: String)
+private const val CANCEL_ORDER = "cancel-order"
+private const val PROCESS_CANCELLATION = "process-cancellation"
 
 class XsdMessageHandler : RequestHandler<Map<String, Any>, String> {
-
-    private val objectMapper: ObjectMapper = ObjectMapper().registerKotlinModule()
+    private val logger = LoggerFactory.getLogger(XsdMessageHandler::class.java)
+    private val objectMapper: ObjectMapper = ObjectMapper()
+    private val xmlMapper = XmlMapper().registerKotlinModule()
 
     override fun handleRequest(event: Map<String, Any>, context: Context): String {
-        println("🟢 Received event: $event")
-
         // Extract Kafka messages from the event payload
         val records = (event["records"] as? Map<String, List<Map<String, Any>>>) ?: return "❌ No messages found"
 
@@ -44,30 +39,49 @@ class XsdMessageHandler : RequestHandler<Map<String, Any>, String> {
             for ((_, messages) in records) {
                 for (message in messages) {
                     val encodedValue = message["value"] as? String ?: continue
-                    println("📩 Received raw Kafka message: $encodedValue")
 
                     // Decode Base64 payload (since AWS Lambda encodes Kafka messages in Base64)
                     val decodedBytes = Base64.getDecoder().decode(encodedValue)
                     val decodedMessage = String(decodedBytes)
-                    println("📜 Decoded message: $decodedMessage")
+                    logger.info("📜 Received message from topic: ${CANCEL_ORDER}: $decodedMessage")
 
-                    // Deserialize JSON message
-                    val request: JsonConversionRequest = objectMapper.readValue(decodedMessage, JsonConversionRequest::class.java )
+                    val headers = message["headers"] as? List<Map<String, Any>>
+                    headers?.forEachIndexed { index, header ->
+                        println("Header[$index] type: ${header.javaClass.name}")
+                        header.forEach { (key, value) ->
+                            println("  Key: $key -> Value type: ${value.javaClass.name}")
+                        }
+                    }
+                    val orderCorrelationIdBytes = headers
+                        ?.firstOrNull { it.containsKey("orderCorrelationId") }
+                        ?.get("orderCorrelationId")
+                        ?.let { rawValue ->
+                            val intList = rawValue as? List<*> ?: return@let null
+                            intList.mapNotNull { (it as? Number)?.toByte() }.toByteArray()
+                        }
 
-                    // Convert XSD to JSON (Dummy conversion)
-                    val jsonReply= JsonConversionReply(request.id, "Converted from XSD")
-                    val jsonReplyMessage = objectMapper.writeValueAsString(jsonReply);
+                    val orderCorrelationId = orderCorrelationIdBytes?.let { String(it) } ?: ""
 
-                    println("📜 Sending json message: $jsonReplyMessage")
+                    logger.info("CorrelationId of the message: $orderCorrelationId")
 
-                    // Publish transformed message to Kafka
-                    val replyRecord = ProducerRecord("io.specmatic.json.reply", jsonReply.id.toString(), jsonReplyMessage)
+                    // Parse XML into CancelOrderRequest
+                    val cancelOrderRequest = xmlMapper.readValue(decodedMessage, CancelOrderRequest::class.java)
+
+                    // Construct CancellationReference response
+                    val cancellationReference = CancellationReference(
+                        reference = cancelOrderRequest.id,
+                        status = "PENDING",
+                    )
+                    val cancellationReferenceMessage = objectMapper.writeValueAsString(cancellationReference)
+
+                    val replyRecord = ProducerRecord(PROCESS_CANCELLATION, cancellationReference.reference.toString(), cancellationReferenceMessage)
+                    replyRecord.headers().add("orderCorrelationId", orderCorrelationId.toByteArray())
 
                     try {
                         producer.send(replyRecord).get() // Ensure message is sent
-                        println("✅ Published transformed message: $jsonReplyMessage")
+                        logger.info("✅ Published message on topic: $PROCESS_CANCELLATION: $cancellationReferenceMessage with CorrelationId: $orderCorrelationId")
                     } catch (e: Exception) {
-                        println("❌ Failed to publish message: ${e.message}")
+                        logger.error("❌ Failed to publish message on topic: ${PROCESS_CANCELLATION}: ${e.message}")
                     }
                 }
             }

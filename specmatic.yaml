@@ -1,8 +1,5 @@
 version: 2
 contracts:
   - filesystem:
-      directory: .
     provides:
-      - xml_to_json.yaml
-    consumes:
-      - xml_to_json.yaml
+      - "api-specifications/order-service-async-v3_0_0.yaml"

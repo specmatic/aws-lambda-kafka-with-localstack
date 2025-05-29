@@ -1,0 +1,19 @@
+<!-- src/main/resources/logback.xml -->
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.apache.kafka" level="WARN"/>
+    <logger name="org.apache.kafka.clients" level="WARN"/>
+    <logger name="org.apache.kafka.common.utils.AppInfoParser" level="ERROR"/>
+    <logger name="org.apache.kafka.common.metrics" level="ERROR"/>
+
+    <logger name="com.example.XsdMessageHandler" level="INFO"/>
+
+    <root level="INFO"> <!-- Make sure it's INFO or DEBUG -->
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

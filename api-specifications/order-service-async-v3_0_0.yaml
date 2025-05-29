@@ -1,0 +1,72 @@
+asyncapi: 3.0.0
+info:
+  title: Order API
+  version: 1.0.0
+channels:
+  cancel-order:
+    address: cancel-order
+    messages:
+      cancelOrder.message:
+        $ref: '#/components/messages/CancelOrderRequest'
+  process-cancellation:
+    address: process-cancellation
+    messages:
+      processCancellation.message:
+        $ref: '#/components/messages/CancellationReference'
+operations:
+  cancelOrder:
+    action: receive
+    channel:
+      $ref: '#/channels/cancel-order'
+    messages:
+      - $ref: '#/channels/cancel-order/messages/cancelOrder.message'
+    reply:
+      channel:
+        $ref: '#/channels/process-cancellation'
+      messages:
+        - $ref: '#/channels/process-cancellation/messages/processCancellation.message'
+components:
+  messages:
+    CancelOrderRequest:
+      name: CancelOrderRequest
+      title: A cancel order request
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          orderCorrelationId:
+            type: string
+            description: Unique identifier for the request
+      correlationId:
+        $ref: "#/components/correlationIds/orderCorrelationId"
+      payload:
+        schemaFormat: 'application/xml'
+        schema:
+          $ref: './xsd/cancelOrderRequest.xsd'
+    CancellationReference:
+      name: CancellationReference
+      title: A cancellation reference in response to a cancel order request
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          orderCorrelationId:
+            type: string
+            description: Unique identifier for the request
+      correlationId:
+        $ref: "#/components/correlationIds/orderCorrelationId"
+      payload:
+        $ref: '#/components/schemas/CancellationReferencePayload'
+  schemas:
+    CancellationReferencePayload:
+      type: object
+      properties:
+        reference:
+          type: integer
+        status:
+          type: string
+          enum: [ "INPROGRESS", "FAILED" ]
+      required: [ "reference", "status" ]
+  correlationIds:
+    orderCorrelationId:
+      location: '$message.header#/orderCorrelationId'

@@ -30,7 +30,14 @@ aws configure --profile localstack
 - **Region:** `us-east-1`
 - **Output Format:** `json`
 
-## 🛠️ **Set Up Kafka & Lambda in LocalStack**
+## 🛠️ **Set Up Kafka & Lambda in LocalStack One Shot**
+To setup everything in one go, run the following shell script:  
+
+```sh
+./setup.sh
+```
+
+## 🛠️ **Set Up Kafka & Lambda in LocalStack Step by Step**
 
 ### **1️⃣ Start LocalStack with persistence enabled**
 ```sh
@@ -89,14 +96,14 @@ kafka-topics --create \
     --bootstrap-server localhost.localstack.cloud:4511 \
     --replication-factor 1 \
     --partitions 1 \
-    --topic io.specmatic.json.request
+    --topic cancel-order
 ```
 ```sh
 kafka-topics --create \
     --bootstrap-server localhost.localstack.cloud:4511 \
     --replication-factor 1 \
     --partitions 1 \
-    --topic io.specmatic.json.reply
+    --topic process-cancellation
 ```
 
 ### **6️⃣ Deploy AWS Lambda**
@@ -139,7 +146,7 @@ Search for the function `LambdaToKafka` using `/` and `q` to quit.
 aws lambda create-event-source-mapping \
     --function-name LambdaToKafka \
     --event-source-arn "<YOUR_CLUSTER_ARN>" \
-    --topics "io.specmatic.json.request" \
+    --topics "cancel-order" \
     --starting-position LATEST \
     --region us-east-1 \
     --profile localstack \
@@ -150,27 +157,27 @@ aws lambda create-event-source-mapping \
 
 ## Testing the Lambda function:
 
-### Publish a message on the **io.specmatic.json.request** topic:
+### Publish a message on the **cancel-order** topic:
 
 ```shell
-kafka-console-producer --broker-list localhost:4511 --topic io.specmatic.json.request
+kafka-console-producer --broker-list localhost:4511 --topic cancel-order
 ```
 
 Copy and paste the following json object and press enter:
-```json
-{"id": 1, "xsd": "xsd 1"}
+```xml
+<CancelOrderRequest><id>71717</id></CancelOrderRequest>
 ```
 
 Press `Ctrl+D`.
 
-### Verify message on the **io.specmatic.json.reply** topic:
+### Verify message on the **process-cancellation** topic:
 ```shell
-kafka-console-consumer --bootstrap-server localhost:4511 --topic io.specmatic.json.reply --from-beginning
+kafka-console-consumer --bootstrap-server localhost:4511 --topic process-cancellation --from-beginning
 ```
 
 You should see the following message :
 ```json
-{"id": 1, "json": "Converted from XSD"}
+{"reference": 12345, "status": "COMPLETED"}
 ```
 
 If you don't see this message, check the logs for your lambda function:
