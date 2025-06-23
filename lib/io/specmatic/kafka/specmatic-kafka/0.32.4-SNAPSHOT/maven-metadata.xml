@@ -3,20 +3,21 @@
   <groupId>io.specmatic.kafka</groupId>
   <artifactId>specmatic-kafka</artifactId>
   <versioning>
-    <lastUpdated>20250523211541</lastUpdated>
+    <lastUpdated>20250623123505</lastUpdated>
     <snapshot>
-      <localCopy>true</localCopy>
+      <timestamp>20250623.123505</timestamp>
+      <buildNumber>1</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>0.32.4-SNAPSHOT</value>
-        <updated>20250523211541</updated>
+        <value>0.32.4-20250623.123505-1</value>
+        <updated>20250623123505</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>0.32.4-SNAPSHOT</value>
-        <updated>20250523211541</updated>
+        <value>0.32.4-20250623.123505-1</value>
+        <updated>20250623123505</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
