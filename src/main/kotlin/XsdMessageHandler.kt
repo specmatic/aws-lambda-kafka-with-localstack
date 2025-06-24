@@ -70,7 +70,7 @@ class XsdMessageHandler : RequestHandler<Map<String, Any>, String> {
                     // Construct CancellationReference response
                     val cancellationReference = CancellationReference(
                         reference = cancelOrderRequest.id,
-                        status = "PENDING",
+                        status = "INPROGRESS",
                     )
                     val cancellationReferenceMessage = objectMapper.writeValueAsString(cancellationReference)
 

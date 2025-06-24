@@ -45,3 +45,4 @@ TEST-junit-jupiter.xml
 SEND_ME.html
 .java-version
 .specmatic
+broker-config.json

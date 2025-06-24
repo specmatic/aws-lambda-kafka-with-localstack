@@ -11,18 +11,24 @@ This project demonstrates below aspects
 Please make sure you have Docker Desktop installed on your machine.
 
 If you don’t have the AWS CLI installed, install it from:
-[AWS CLI installation](https://docs.aws.amazon.com/cli/v1/userguide/install-macos.html)
+[AWS CLI installation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 ### **2. Install LocalStack**
 You can install LocalStack via pip:
-```sh
+```shell
 brew install localstack
 ```
+
+### **3. Install Kafka Client**
+```shell
+brew install kafka
+```
+
 Signup with localstack to get an Auth Token (choose an appropriate license - Example: Trial or Hobby licence).
 
 ### **3. Create a Fake AWS Profile for LocalStack**
 Since LocalStack is a **mock AWS environment**, configure a fake profile:
-```sh
+```shell
 aws configure --profile localstack
 ```
 - **AWS Access Key:** `test`
@@ -51,7 +57,7 @@ Please refer to [GitHub comment](https://github.com/docker/for-mac/issues/6677#i
 
 ## 🚀 Setting up Kafka cluster
 ### **2️⃣ Create an Amazon Kafka MSK Cluster**
-```sh
+```shell
 aws kafka create-cluster \
     --cluster-name my-kafka-cluster \
     --kafka-version 2.8.1 \
