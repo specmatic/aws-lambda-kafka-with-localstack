@@ -20,15 +20,15 @@ repositories {
 def specmatic_version = "2.10.0"
 
 
-configurations.all {
-    exclude group: 'org.slf4j', module: 'slf4j-nop'
-
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        if (details.requested.group == 'org.slf4j' && details.requested.name == 'slf4j-nop') {
-            details.useTarget 'org.slf4j:slf4j-api:2.0.16' // dummy target to override
-        }
-    }
-}
+//configurations.all {
+//    exclude group: 'org.slf4j', module: 'slf4j-nop'
+//
+//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//        if (details.requested.group == 'org.slf4j' && details.requested.name == 'slf4j-nop') {
+//            details.useTarget 'org.slf4j:slf4j-api:2.0.16' // dummy target to override
+//        }
+//    }
+//}
 
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
@@ -41,11 +41,11 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core:2.15.0")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.0")
     implementation("org.slf4j:slf4j-api:2.0.12")
-    runtimeOnly("ch.qos.logback:logback-classic:1.5.8")
-    runtimeOnly("ch.qos.logback:logback-core:1.5.8")
+    implementation("ch.qos.logback:logback-classic:1.5.18")
+    implementation("ch.qos.logback:logback-core:1.5.18")
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    testApi "io.specmatic:junit5-support:${specmatic_version}"
+    testImplementation "io.specmatic:junit5-support:${specmatic_version}"
     testImplementation('io.specmatic.kafka:specmatic-kafka:0.32.4-SNAPSHOT')
     testImplementation(
             'org.assertj:assertj-core:3.24.2',
