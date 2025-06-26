@@ -36,17 +36,8 @@ aws configure --profile localstack
 - **Region:** `us-east-1`
 - **Output Format:** `json`
 
-## 🛠️ **Set Up Kafka & Lambda in LocalStack One Shot**
-To setup everything in one go, run the following shell script:  
-
-```sh
-./setup.sh
-```
-
-## 🛠️ **Set Up Kafka & Lambda in LocalStack Step by Step**
-
-### **1️⃣ Start LocalStack with persistence enabled**
-```sh
+### Start LocalStack with persistence enabled**
+```shell
 localstack auth set-token <your-auth-token>
 LOCALSTACK_PERSISTENCE=1 localstack start
 ```
@@ -54,6 +45,17 @@ LOCALSTACK_PERSISTENCE=1 localstack start
 #### Troubleshooting `vmnetd` issues with Docker on MacOS
 
 Please refer to [GitHub comment](https://github.com/docker/for-mac/issues/6677#issuecomment-1593787335).
+
+## 🛠️ **Set Up Kafka & Lambda in LocalStack One Shot**
+To setup everything in one go, run the following shell script:  
+
+```shell
+./setup.sh
+```
+
+Alternatively, you can follow the steps below to set up Kafka and Lambda in LocalStack manually.
+
+## 🛠️ **Set Up Kafka & Lambda in LocalStack Step by Step**
 
 ## 🚀 Setting up Kafka cluster
 ### **2️⃣ Create an Amazon Kafka MSK Cluster**
@@ -69,7 +71,7 @@ aws kafka create-cluster \
 ```
 
 ### **3️⃣ Verify the Kafka Cluster**
-```sh
+```shell
 aws kafka list-clusters \
     --region us-east-1 \
     --profile localstack \
@@ -80,7 +82,7 @@ Please save the value of the **ClusterArn** field in the response.
 You will need to use this in some of the next steps where you see `<YOUR_CLUSTER_ARN>`.
 
 ### **4️⃣ Get Kafka Bootstrap Brokers**
-```sh
+```shell
 aws kafka get-bootstrap-brokers \
     --cluster-arn "<YOUR_CLUSTER_ARN>" \
     --profile localstack \
@@ -97,14 +99,14 @@ aws kafka get-bootstrap-brokers \
 
 **Pre-requisite:** Install Kafka on your local machine to use the `kafka-topics.sh` command.
 
-```sh
+```shell
 kafka-topics --create \
     --bootstrap-server localhost.localstack.cloud:4511 \
     --replication-factor 1 \
     --partitions 1 \
     --topic cancel-order
 ```
-```sh
+```shell
 kafka-topics --create \
     --bootstrap-server localhost.localstack.cloud:4511 \
     --replication-factor 1 \
@@ -124,7 +126,7 @@ Build the project and create a fat jar
 ```
 
 Deploy the fat jar as a lambda function
-```sh
+```shell
 aws lambda create-function \
     --function-name LambdaToKafka \
     --runtime java17 \
@@ -141,14 +143,14 @@ aws lambda create-function \
 `Use `q` to quit.`
 
 ### **7️⃣ Verify Lambda Deployment**
-```sh
+```shell
 aws lambda list-functions --profile localstack --endpoint-url=http://localhost:4566
 ```
 
 Search for the function `LambdaToKafka` using `/` and `q` to quit.
 
 ### **8️⃣ Create Event Source Mapping for Kafka**
-```sh
+```shell
 aws lambda create-event-source-mapping \
     --function-name LambdaToKafka \
     --event-source-arn "<YOUR_CLUSTER_ARN>" \
