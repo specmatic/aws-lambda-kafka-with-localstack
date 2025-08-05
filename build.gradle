@@ -1,7 +1,7 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
+    id 'org.jetbrains.kotlin.jvm' version '2.1.0'
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.1.0'
 }
 
 group = 'org.example'
@@ -17,8 +17,6 @@ repositories {
     mavenCentral()
     mavenLocal()
 }
-def specmatic_version = "2.10.0"
-
 
 //configurations.all {
 //    exclude group: 'org.slf4j', module: 'slf4j-nop'
@@ -45,8 +43,7 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.5.18")
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    testImplementation "io.specmatic:junit5-support:${specmatic_version}"
-    testImplementation('io.specmatic.kafka:specmatic-kafka:0.32.4-SNAPSHOT')
+    testImplementation('io.specmatic.async:specmatic-kafka:1.0.6')
     testImplementation(
             'org.assertj:assertj-core:3.24.2',
             'org.junit.jupiter:junit-jupiter-api:5.10.1'
