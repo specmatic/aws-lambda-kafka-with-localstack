@@ -9,7 +9,7 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     maven {
-        url uri("lib")
+        url "https://repo.specmatic.io/releases"
     }
     maven {
         url "https://packages.confluent.io/maven/"
@@ -17,16 +17,6 @@ repositories {
     mavenCentral()
     mavenLocal()
 }
-
-//configurations.all {
-//    exclude group: 'org.slf4j', module: 'slf4j-nop'
-//
-//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-//        if (details.requested.group == 'org.slf4j' && details.requested.name == 'slf4j-nop') {
-//            details.useTarget 'org.slf4j:slf4j-api:2.0.16' // dummy target to override
-//        }
-//    }
-//}
 
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
