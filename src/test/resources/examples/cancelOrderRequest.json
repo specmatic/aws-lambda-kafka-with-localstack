@@ -7,16 +7,14 @@
     },
     "payload": "<CancelOrderRequest><id>10101</id></CancelOrderRequest>"
   },
-  "send": [
-    {
-      "topic": "process-cancellation",
-      "headers": {
-        "orderCorrelationId": "123456789"
-      },
-      "payload": {
-        "reference": 10101,
-        "status": "INPROGRESS"
-      }
+  "send": {
+    "topic": "process-cancellation",
+    "headers": {
+      "orderCorrelationId": "123456789"
+    },
+    "payload": {
+      "reference": 10101,
+      "status": "INPROGRESS"
     }
-  ]
+  }
 }
