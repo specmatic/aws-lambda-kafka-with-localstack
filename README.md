@@ -6,27 +6,24 @@ This project demonstrates below aspects
 
 ## 🚀 Prerequisites
 
-### **1. Install Docker Desktop and AWS CLI**
+### 1. Install Docker Desktop and AWS CLI
 
 Please make sure you have Docker Desktop installed on your machine.
 
 If you don’t have the AWS CLI installed, install it from:
 [AWS CLI installation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
-### **2. Install LocalStack**
-You can install LocalStack via pip:
-```shell
-brew install localstack
-```
-
-### **3. Install Kafka Client**
+### 2. Install Kafka Client
 ```shell
 brew install kafka
 ```
 
-Signup with localstack to get an Auth Token (choose an appropriate license - Example: Trial or Hobby licence).
+### 3. LocalStack setup
 
-### **3. Create a Fake AWS Profile for LocalStack**
+Signup with localstack to get an Auth Token (choose an appropriate license - Example: Trial or Hobby licence).
+And update the [docker-compose.yaml](docker-compose.yaml) by replacing "<PLEASE ADD YOUR TOKEN HERE>" with your API key.
+
+### 4. Create a Fake AWS Profile for LocalStack
 Since LocalStack is a **mock AWS environment**, configure a fake profile:
 ```shell
 aws configure --profile localstack
@@ -36,10 +33,12 @@ aws configure --profile localstack
 - **Region:** `us-east-1`
 - **Output Format:** `json`
 
-### Start LocalStack with persistence enabled**
+### 5. Start LocalStack**
+
+This will start LocalStack with persistence enabled.
+
 ```shell
-localstack auth set-token <your-auth-token>
-LOCALSTACK_PERSISTENCE=1 localstack start
+docker compose up
 ```
 
 #### Troubleshooting `vmnetd` issues with Docker on MacOS
@@ -47,7 +46,8 @@ LOCALSTACK_PERSISTENCE=1 localstack start
 Please refer to [GitHub comment](https://github.com/docker/for-mac/issues/6677#issuecomment-1593787335).
 
 ## 🛠️ **Set Up Kafka & Lambda in LocalStack One Shot**
-To setup everything in one go, run the following shell script:  
+
+To setup everything in one go (creating Kafka Cluster, Topics, Subnet, Security Groups, etc.), run the following shell script:  
 
 ```shell
 ./setup.sh
@@ -58,7 +58,7 @@ Alternatively, you can follow the steps below to set up Kafka and Lambda in Loca
 ## 🛠️ **Set Up Kafka & Lambda in LocalStack Step by Step**
 
 ## 🚀 Setting up Kafka cluster
-### **2️⃣ Create an Amazon Kafka MSK Cluster**
+### **1️⃣ Create an Amazon Kafka MSK Cluster**
 ```shell
 aws kafka create-cluster \
     --cluster-name my-kafka-cluster \
@@ -70,7 +70,7 @@ aws kafka create-cluster \
     --endpoint-url=http://localhost:4566
 ```
 
-### **3️⃣ Verify the Kafka Cluster**
+### **2️⃣ Verify the Kafka Cluster**
 ```shell
 aws kafka list-clusters \
     --region us-east-1 \
@@ -81,7 +81,7 @@ aws kafka list-clusters \
 Please save the value of the **ClusterArn** field in the response.
 You will need to use this in some of the next steps where you see `<YOUR_CLUSTER_ARN>`.
 
-### **4️⃣ Get Kafka Bootstrap Brokers**
+### **3️⃣ Get Kafka Bootstrap Brokers**
 ```shell
 aws kafka get-bootstrap-brokers \
     --cluster-arn "<YOUR_CLUSTER_ARN>" \
@@ -95,7 +95,7 @@ aws kafka get-bootstrap-brokers \
 }
 ```
 
-### **5️⃣ Create Kafka Topics**
+### **4️⃣ Create Kafka Topics**
 
 **Pre-requisite:** Install Kafka on your local machine to use the `kafka-topics.sh` command.
 
@@ -114,7 +114,7 @@ kafka-topics --create \
     --topic process-cancellation
 ```
 
-### **6️⃣ Deploy AWS Lambda**
+### **5️⃣ Deploy AWS Lambda**
 
 **Pre-requisite:** Use JDK 17, for example if you are using jenv, please run: `jenv local 17`
 
@@ -142,14 +142,14 @@ aws lambda create-function \
 
 `Use `q` to quit.`
 
-### **7️⃣ Verify Lambda Deployment**
+### **6️⃣ Verify Lambda Deployment**
 ```shell
 aws lambda list-functions --profile localstack --endpoint-url=http://localhost:4566
 ```
 
 Search for the function `LambdaToKafka` using `/` and `q` to quit.
 
-### **8️⃣ Create Event Source Mapping for Kafka**
+### **7️⃣ Create Event Source Mapping for Kafka**
 ```shell
 aws lambda create-event-source-mapping \
     --function-name LambdaToKafka \
