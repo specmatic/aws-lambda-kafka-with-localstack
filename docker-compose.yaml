@@ -1,6 +1,6 @@
 services:
   localstack:
-    image: localstack/localstack-pro:4.5
+    image: localstack/localstack-pro:4.11
     environment:
       - LOCALSTACK_AUTH_TOKEN=<PLEASE ADD YOUR TOKEN HERE>
       - LOCALSTACK_PERSISTENCE=1
