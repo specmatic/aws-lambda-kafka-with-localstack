@@ -1,5 +1,6 @@
 version: 2
 contracts:
   - filesystem:
+      directory: api-specifications
     provides:
-      - "api-specifications/order-service-async-v3_0_0.yaml"
+      - order-service-async-v3_0_0.yaml
