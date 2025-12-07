@@ -13,6 +13,11 @@ Please make sure you have Docker Desktop installed on your machine.
 If you don’t have the AWS CLI installed, install it from:
 [AWS CLI installation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
+#### MacOS - Using Homebrew
+```shell
+brew install awscli
+```
+
 ### 2. Install Kafka Client
 ```shell
 brew install kafka
@@ -168,7 +173,7 @@ aws lambda create-event-source-mapping \
 ### Publish a message on the **cancel-order** topic:
 
 ```shell
-kafka-console-producer --broker-list localhost:4511 --topic cancel-order
+kafka-console-producer --bootstrap-server localhost:4511 --topic cancel-order
 ```
 
 Copy and paste the following json object and press enter:
@@ -185,7 +190,7 @@ kafka-console-consumer --bootstrap-server localhost:4511 --topic process-cancell
 
 You should see the following message :
 ```json
-{"reference": 12345, "status": "COMPLETED"}
+{"reference": 12345, "status": "INPROGRESS"}
 ```
 
 If you don't see this message, check the logs for your lambda function:

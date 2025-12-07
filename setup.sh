@@ -181,7 +181,7 @@ echo "✅ Cleaned and generated new $OUTPUT_FILE"
 echo "Creating Kafka cluster..."
 aws kafka create-cluster \
     --cluster-name my-kafka-cluster \
-    --kafka-version 2.8.0 \
+    --kafka-version 3.8.x \
     --broker-node-group-info file://broker-config.json \
     --number-of-broker-nodes 2 \
     --region us-east-1 \
