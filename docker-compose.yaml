@@ -4,8 +4,10 @@ services:
     environment:
       - LOCALSTACK_AUTH_TOKEN=<PLEASE ADD YOUR TOKEN HERE>
       - LOCALSTACK_PERSISTENCE=1
+      - EXTERNAL_SERVICE_PORTS_START=4510
+      - EXTERNAL_SERVICE_PORTS_END=4512
     ports:
       - "4566:4566"
-      - "4510-4559:4510-4559"
+      - "4511:4511"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"

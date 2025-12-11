@@ -202,6 +202,13 @@ CLUSTER_ARN=$(aws kafka list-clusters \
 
 echo "ClusterArn: $CLUSTER_ARN"
 
+echo "List Kafka topics"
+if ! kafka-topics --bootstrap-server localhost.localstack.cloud:4511 --list >/dev/null 2>&1; then
+  echo "Kafka broker not ready..."
+fi
+
+echo "Waiting for Kafka brokers to start..."
+
 # Create Kafka topics
 echo "Creating Kafka topics..."
 kafka-topics --create \

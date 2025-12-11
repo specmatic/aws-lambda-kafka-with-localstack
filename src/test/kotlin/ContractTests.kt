@@ -1,4 +1,3 @@
-
 import io.specmatic.async.core.constants.AVAILABLE_SERVERS
 import io.specmatic.async.core.constants.SPECMATIC_KAFKA_EXAMPLES_DIR
 import io.specmatic.kafka.test.SpecmaticKafkaContractTest
